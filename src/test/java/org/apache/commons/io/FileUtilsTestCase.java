@@ -636,6 +636,16 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         // Existing directory
         file.delete();
         file.mkdir();
+        
+        // Creating a cyclic symlink
+     	if(!FilenameUtils.isSystemWindows()) {
+     	 Runtime.getRuntime().exec("ln -s " + file + "/.. " + file + "/cycle");
+     	} else {
+     	try {
+     	 Runtime.getRuntime().exec("mklink /D " + file + "/cycle" + file + "/.. ");
+     	} catch(IOException ioe) { 
+     	  }
+     	}
 
         assertEquals(
             "Unexpected directory size",

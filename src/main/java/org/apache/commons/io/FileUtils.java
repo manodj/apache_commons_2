@@ -2082,11 +2082,21 @@ public class FileUtils {
         long size = 0;
 
         File[] files = directory.listFiles();
+
         if (files == null) {  // null if security restricted
             return 0L;
         }
         for (File file : files) {
-            size += sizeOf(file);
+        	try {
+                     if (!isSymlink(file)) {
+                     size += sizeOf(file);
+               }
+        	}
+            catch(IOException e){
+            	
+            }
+        	
+          //  size += sizeOf(file);
         }
 
         return size;
@@ -2485,7 +2495,8 @@ public class FileUtils {
         if (fileInCanonicalDir.getCanonicalFile().equals(fileInCanonicalDir.getAbsoluteFile())) {
             return false;
         } else {
-            return true;
-        }
+            return true; 
+        }    
+       
     }
 }
